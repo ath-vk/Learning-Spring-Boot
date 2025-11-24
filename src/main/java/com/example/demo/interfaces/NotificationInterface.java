@@ -1,0 +1,7 @@
+package com.example.demo.interfaces;
+
+public interface NotificationInterface {
+
+    void sendNotification();
+
+}
