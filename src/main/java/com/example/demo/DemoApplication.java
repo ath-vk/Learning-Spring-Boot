@@ -2,11 +2,9 @@ package com.example.demo;
 
 import com.example.demo.interfaces.NotificationInterface;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,6 +19,7 @@ public class DemoApplication implements CommandLineRunner {
     // This is constructor DI, this is recommended in production
     // Considered as best practice (not tightly coupled, easy to test, object management is easy)
     private final NotificationInterface notificationService;
+    private final CakeBaker cakeBaker;
 
     @Autowired
     Map<String, NotificationInterface> map = new HashMap<>();
@@ -32,8 +31,9 @@ public class DemoApplication implements CommandLineRunner {
 //        this.notificationService = notificationService;
 //    }
 
-    public DemoApplication(NotificationInterface notificationService) {
+    public DemoApplication(NotificationInterface notificationService, CakeBaker cakeBaker) {
         this.notificationService = notificationService;
+        this.cakeBaker = cakeBaker;
     }
 
     public static void main(String[] args) {
@@ -48,6 +48,8 @@ public class DemoApplication implements CommandLineRunner {
         for(Map.Entry<String, NotificationInterface> entry: map.entrySet()) {
             entry.getValue().sendNotification();
         }
+
+        cakeBaker.bakeCake();
     }
 }
 
@@ -55,3 +57,6 @@ public class DemoApplication implements CommandLineRunner {
 //Sending Email Notification
 //Sending Email Notification
 //Sending SMS notification
+//Baking Cake
+//Frosting type: 0
+//Syrup type: 3
