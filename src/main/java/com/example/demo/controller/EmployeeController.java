@@ -1,15 +1,29 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.Employee;
+import com.example.demo.entities.EmployeeEntity;
+import com.example.demo.repositories.EmployeeRepository;
+import com.example.demo.service.EmployeeService;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "employee")
 public class EmployeeController {
 
+    private final EmployeeService employeeService;
+
+    public EmployeeController(EmployeeService employeeService) {
+        this.employeeService = employeeService;
+    }
+
+
     @GetMapping(path = "{employeeId}")
     public Employee getEmployee(@PathVariable(name="employeeId") Long id) {
-        return new Employee(id, "atharva", "", 25, true);
+        //return new Employee(id, "atharva", "", 25, true);
+        //return employeeRepository.findById(id).orElse(null);
+        return employeeService.getEmployeeById(id);
     }
 
     @GetMapping
@@ -17,11 +31,16 @@ public class EmployeeController {
         return "Hi employee, your age is " + a + ", your isActive is " + iA;
     }
 
-    @PostMapping
-    public Employee postEmployee(@RequestBody Employee e) {
-        e.setAge(25);
-        return e;
+    @GetMapping(path="/getAllEmployees")
+    public List<Employee> getEmployees() {
+        return employeeService.getAllEmployees();
     }
+
+//    @PostMapping
+//    public EmployeeEntity postEmployee(@RequestBody EmployeeEntity e) {
+//        EmployeeEntity savedEmployee = employeeService.saveEmployee(e);
+//        return savedEmployee;
+//    }
 
     @PutMapping
     public String checkPut() {
