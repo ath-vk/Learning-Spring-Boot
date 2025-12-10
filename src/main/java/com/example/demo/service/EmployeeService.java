@@ -22,8 +22,7 @@ public class EmployeeService {
 
     public Employee getEmployeeById(Long id) {
         EmployeeEntity employeeEntity = employeeRepository.findById(id).orElse(null);
-        ModelMapper mapper = new ModelMapper();
-        return mapper.map(employeeEntity, Employee.class);
+        return modelMapper.map(employeeEntity, Employee.class);
     }
 
     public List<Employee> getAllEmployees() {
@@ -34,8 +33,9 @@ public class EmployeeService {
                 .collect(Collectors.toList());
     }
 
-//    public boolean saveEmployee(Employee e) {
-//        EmployeeEntity employeeEntity = modelMapper.map(e, EmployeeEntity.class);
-//    }
+    public Employee saveEmployee(Employee e) {
+        EmployeeEntity employeeEntity = employeeRepository.save(modelMapper.map(e, EmployeeEntity.class));
+        return modelMapper.map(employeeEntity, Employee.class);
+    }
 
 }

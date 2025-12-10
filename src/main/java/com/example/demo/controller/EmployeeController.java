@@ -36,11 +36,10 @@ public class EmployeeController {
         return employeeService.getAllEmployees();
     }
 
-//    @PostMapping
-//    public EmployeeEntity postEmployee(@RequestBody EmployeeEntity e) {
-//        EmployeeEntity savedEmployee = employeeService.saveEmployee(e);
-//        return savedEmployee;
-//    }
+    @PostMapping
+    public Employee postEmployee(@RequestBody Employee e) {
+        return employeeService.saveEmployee(e);
+    }
 
     @PutMapping
     public String checkPut() {

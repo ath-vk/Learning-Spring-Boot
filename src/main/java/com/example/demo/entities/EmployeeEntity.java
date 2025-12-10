@@ -1,5 +1,6 @@
 package com.example.demo.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,6 +21,7 @@ public class EmployeeEntity {
     String name;
     String email;
     Integer age;
+    @JsonProperty("isActive")
     Boolean isActive;
 
 }
