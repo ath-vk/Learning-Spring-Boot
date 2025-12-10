@@ -1,12 +1,14 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.Employee;
-import com.example.demo.entities.EmployeeEntity;
-import com.example.demo.repositories.EmployeeRepository;
 import com.example.demo.service.EmployeeService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "employee")
@@ -20,10 +22,13 @@ public class EmployeeController {
 
 
     @GetMapping(path = "{employeeId}")
-    public Employee getEmployee(@PathVariable(name="employeeId") Long id) {
+    public ResponseEntity<Employee> getEmployee(@PathVariable(name="employeeId") Long id) {
         //return new Employee(id, "atharva", "", 25, true);
         //return employeeRepository.findById(id).orElse(null);
-        return employeeService.getEmployeeById(id);
+        Optional<Employee> employeeDTO = employeeService.getEmployeeById(id);
+        return employeeDTO
+                .map(employee -> ResponseEntity.ok().body(employee))
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping
@@ -32,18 +37,37 @@ public class EmployeeController {
     }
 
     @GetMapping(path="/getAllEmployees")
-    public List<Employee> getEmployees() {
-        return employeeService.getAllEmployees();
+    public ResponseEntity<List<Employee>> getEmployees() {
+        return ResponseEntity.ok(employeeService.getAllEmployees());
     }
 
     @PostMapping
-    public Employee postEmployee(@RequestBody Employee e) {
-        return employeeService.saveEmployee(e);
+    public ResponseEntity<Employee> postEmployee(@RequestBody Employee e) {
+        Employee employee = employeeService.saveEmployee(e);
+        return new ResponseEntity<>(employee, HttpStatus.CREATED);
     }
 
-    @PutMapping
-    public String checkPut() {
-        return "Hello this is response for PUT";
+    @PutMapping(path="{employeeId}")
+    public ResponseEntity<Employee> updateEmployee(@PathVariable Long employeeId, @RequestBody Employee e) {
+        return ResponseEntity.ok(employeeService.updateEmployee(employeeId, e));
+    }
+
+    @DeleteMapping(path="{employeeId}")
+    public ResponseEntity<Boolean> deleteEmployee(@PathVariable Long employeeId) {
+        boolean gotDeleted = employeeService.deleteEmployee(employeeId);
+        if(gotDeleted) {
+            return ResponseEntity.ok(true);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @PatchMapping(path="{employeeId}")
+    public ResponseEntity<Employee> patchEmployee(@PathVariable Long employeeId, @RequestBody Map<String, Object> fieldsToUpdate) {
+        Employee employeeDTO = employeeService.patchEmployee(employeeId, fieldsToUpdate);
+        if(employeeDTO == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(employeeDTO);
     }
 
 }
