@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.Employee;
+import com.example.demo.exceptions.ResourceNotFoundException;
 import com.example.demo.service.EmployeeService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
@@ -29,7 +31,7 @@ public class EmployeeController {
         Optional<Employee> employeeDTO = employeeService.getEmployeeById(id);
         return employeeDTO
                 .map(employee -> ResponseEntity.ok().body(employee))
-                .orElse(ResponseEntity.notFound().build());
+                .orElseThrow(() -> new ResourceNotFoundException("Employee with id: " + id + " not found"));
     }
 
     @GetMapping

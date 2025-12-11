@@ -2,11 +2,13 @@ package com.example.demo.service;
 
 import com.example.demo.dto.Employee;
 import com.example.demo.entities.EmployeeEntity;
+import com.example.demo.exceptions.ResourceNotFoundException;
 import com.example.demo.repositories.EmployeeRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.util.ReflectionUtils;
 import org.springframework.stereotype.Service;
 
+import java.lang.module.ResolutionException;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
@@ -52,7 +54,7 @@ public class EmployeeService {
     public boolean deleteEmployee(Long employeeId) {
         boolean exists = employeeRepository.existsById(employeeId);
         if(!exists) {
-            return false;
+            throw new ResourceNotFoundException("Employee with id " + employeeId + " not found");
         }
         employeeRepository.deleteById(employeeId);
         return true;

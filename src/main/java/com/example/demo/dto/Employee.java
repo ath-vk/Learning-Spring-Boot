@@ -1,6 +1,5 @@
 package com.example.demo.dto;
 
-import com.example.demo.annotations.EmployeeRoleValidation;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
