@@ -7,8 +7,8 @@ import lombok.*;
 @Table(name = "admission_records")
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Builder
 public class AdmissionRecord {
@@ -21,9 +21,10 @@ public class AdmissionRecord {
     @Column(nullable = false)
     private Integer fees;
 
-    // owning side for association between AdmissionRecord and Student
-    @OneToOne
-    @JoinColumn(nullable = false, unique = true, name = "student_id")
+    // owning side (has the fk column: admission_records.student_id)
+    @OneToOne(optional = false)
+    @JoinColumn(nullable = false, unique = true, name="student_id")
     private Student student;
+
 
 }
